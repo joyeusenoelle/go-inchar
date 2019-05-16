@@ -57,8 +57,9 @@ func stats() []int {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano()) // Keep this the first line in main()
+
 	barb := Class{"Barbarian", 12, []string{"Int", "Wis", "Cha", "Dex", "Con", "Str"}}
-	rand.Seed(time.Now().UnixNano())
 	fmt.Println("=== Generated D&D character ===")
 	rolls := stats()
 	fmt.Println("Rolls: ", rolls)
@@ -67,5 +68,12 @@ func main() {
 	for k, v := range barb.StatPriority {
 		ply.Stats[v] = rolls[k]
 	}
-	fmt.Println(ply)
+	fmt.Printf("%s - %s\n", ply.Name, ply.Class.Name)
+	fmt.Printf("Str: %d\tInt: %d\nDex: %d\tWis: %d\nCon: %d\tCha: %d\n",
+		ply.Stats["Str"],
+		ply.Stats["Int"],
+		ply.Stats["Dex"],
+		ply.Stats["Wis"],
+		ply.Stats["Con"],
+		ply.Stats["Cha"])
 }
