@@ -45,6 +45,38 @@ func main() {
 	ply.Precision = 1
 	ply.Will = 1
 	ply.Perception = 1
+	ply.Skills = make(map[string]int)
+	ply.Songs = make(map[string]int)
+
+	corSkills := make([]string, 0, 50)
+	ethSkills := make([]string, 0, 50)
+	celSkills := make([]string, 0, 50)
+	akList := make([]string, 0, 50)
+	knowList := make([]string, 0, 50)
+	langList := make([]string, 0, 50)
+	songList := make([]string, 0, 50)
+
+	for _, v := range []string{"Acrobatics", "Climbing", "Dodge", "Escape", "Fighting", "Large Weapon", "Move Silently", "Running", "Swimming", "Throwing"} {
+		corSkills = append(corSkills, v)
+	}
+	for _, v := range []string{"Knowledge", "Knowledge", "Knowledge", "Area Knowledge", "Area Knowledge", "Area Knowledge", "Chemistry", "Computer Operation", "Driving", "Electronics", "Engineering", "Language", "Lockpicking", "Lying", "Medicine", "Ranged Weapon", "Savoir-Faire", "Small Weapon", "Tactics"} {
+		ethSkills = append(ethSkills, v)
+	}
+	for _, v := range []string{"Artistry", "Detect Lies", "Emote", "Fast-Talk", "Seduction", "Singing", "Survival", "Tracking"} {
+		celSkills = append(celSkills, v)
+	}
+	for _, v := range []string{"Heaven", "Hell", "Marches", "Caribbean", "New York", "New England", "Florida", "Atlanta", "Texas", "California", "American Southwest", "Pacific Northwest", "Portland", "Toronto", "Vancouver", "Mexico", "Central America", "Brazil", "Argentina", "England", "London", "France", "Paris", "Norway", "Scandinavia", "Greece", "Egypt", "North Africa", "Sub-Saharan Africa", "Saudi Arabia", "Middle East", "Russia", "Moscow", "China", "Shanghai", "Hong Kong", "Japan", "Hokkaido", "Tokyo", "Australia", "Sydney", "Melbourne", "Perth", "Fiji", "Antarctica"} {
+		akList = append(akList, v)
+	}
+	for _, v := range []string{"Astronomy", "Biology", "Literature", "Aircraft", "American Football", "Football", "Baseball", "Sumo", "Giant Robot Anime", "German Cuisine", "Catholicism", "Islam", "Buddhism", "Shinto", "Architecture", "Eschatology", "Numinology", "Role-Playing Games", "Spelunking", "Parliamentary Procedure", "Olympic History", "18th-Century Botanical Manuals", "Photography", "Marine Biology", "Entomology", "Archaeology"} {
+		knowList = append(knowList, v)
+	}
+	for _, v := range []string{"Mandarin", "Spanish", "English", "Hindi", "Arabic", "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Wu", "Malay", "Telugu", "Vietnamese", "Korean", "French", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", "Yue (Cantonese)", "Thai", "Latin", "Greek", "Ancient Egyptian", "Apache", "Ainu", "Aleut", "Inuit", "Mayan"} {
+		langList = append(langList, v)
+	}
+	for _, v := range []string{"Attraction", "Charm", "Dreams", "Entropy", "Form", "Harmony", "Healing", "Motion", "Numinous Corpus", "Possession", "Projection", "Shields", "Thunder", "Tongues"} {
+		songList = append(songList, v)
+	}
 
 	i := ply.TotalForces - (ply.CorporealForces + ply.EtherealForces + ply.CelestialForces)
 	for i > 0 {
@@ -58,6 +90,9 @@ func main() {
 		}
 		i--
 	}
+
+	cp, corBrk, ethBrk := ply.TotalForces*4, ply.CorporealForces, ply.CorporealForces+ply.EtherealForces
+	sklBrk := 12
 
 	// Corporeal
 	coratt := (ply.CorporealForces * 4) - (ply.Strength + ply.Agility)
@@ -95,7 +130,7 @@ func main() {
 		ethatt--
 	}
 
-	// Corporeal
+	// Celestial
 	celatt := (ply.CelestialForces * 4) - (ply.Will + ply.Perception)
 	for celatt > 0 {
 		r := rand.Intn(2)
@@ -113,6 +148,40 @@ func main() {
 		celatt--
 	}
 
+	b := 7 + rand.Intn(6)
+	for i := cp; i > b; i-- {
+		r := rand.Intn(15)
+		if r < sklBrk { // it's a skill
+			q := rand.Intn(ply.TotalForces)
+			skl := ""
+			if q < corBrk { // it's a corporeal skill
+				skl = util.ChoiceStr(corSkills)
+				// fmt.Println("Selected Corporeal skill: ", skl)
+			} else if q < ethBrk { // it's an ethereal skill
+				skl = util.ChoiceStr(ethSkills)
+				if skl == "Knowledge" {
+					subskl := util.ChoiceStr(knowList)
+					skl = "Knowledge (" + subskl + ")"
+				} else if skl == "Area Knowledge" {
+					subskl := util.ChoiceStr(akList)
+					skl = "Area Knowledge (" + subskl + ")"
+				} else if skl == "Language" {
+					subskl := util.ChoiceStr(langList)
+					skl = "Language (" + subskl + ")"
+				}
+				// fmt.Println("Selected Ethereal skill: ", skl)
+			} else { // it's a celestial skill
+				skl = util.ChoiceStr(celSkills)
+				// fmt.Println("Selected Celestial skill: ", skl)
+			}
+			ply.Skills[skl] = ply.Skills[skl] + 1
+		} else { // Songs
+			skl := util.ChoiceStr(songList)
+			//			fmt.Println("Selected song: ", skl)
+			ply.Songs[skl] = ply.Songs[skl] + 1
+		}
+	}
+
 	fmt.Println("=== Generated In Nomine character ===")
 	fmt.Println(ply.Name)
 	fmt.Printf("Cor %d\tEth %d\tCel %d\n",
@@ -127,4 +196,7 @@ func main() {
 		ply.Agility,
 		ply.Precision,
 		ply.Perception)
+	fmt.Println("Skills: ", ply.Skills)
+	fmt.Println("Songs: ", ply.Songs)
+	fmt.Println("CP Remaining: ", b)
 }
