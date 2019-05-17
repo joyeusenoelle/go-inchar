@@ -12,6 +12,8 @@ import (
 
 type Character struct {
 	Name            string
+	Kind            string
+	Word            string
 	TotalForces     int
 	CorporealForces int
 	EtherealForces  int
@@ -34,6 +36,20 @@ type Character struct {
 func main() {
 	rand.Seed(time.Now().UnixNano()) // Keep this first in main()
 
+	corSkills := []string{"Acrobatics", "Climbing", "Dodge", "Escape", "Fighting", "Large Weapon", "Move Silently", "Running", "Swimming", "Throwing"}
+	ethSkills := []string{"Knowledge", "Knowledge", "Knowledge", "Area Knowledge", "Area Knowledge", "Area Knowledge", "Chemistry", "Computer Operation", "Driving", "Electronics", "Engineering", "Language", "Lockpicking", "Lying", "Medicine", "Ranged Weapon", "Savoir-Faire", "Small Weapon", "Tactics"}
+	celSkills := []string{"Artistry", "Detect Lies", "Emote", "Fast-Talk", "Seduction", "Singing", "Survival", "Tracking"}
+	akList := []string{"Heaven", "Hell", "Marches", "Caribbean", "New York", "New England", "Florida", "Atlanta", "Texas", "California", "American Southwest", "Pacific Northwest", "Portland", "Toronto", "Vancouver", "Mexico", "Central America", "Brazil", "Argentina", "England", "London", "France", "Paris", "Norway", "Scandinavia", "Greece", "Egypt", "North Africa", "Sub-Saharan Africa", "Saudi Arabia", "Middle East", "Russia", "Moscow", "China", "Shanghai", "Hong Kong", "Japan", "Hokkaido", "Tokyo", "Australia", "Sydney", "Melbourne", "Perth", "Fiji", "Antarctica"}
+	knowList := []string{"Astronomy", "Biology", "Literature", "Aircraft", "American Football", "Football", "Baseball", "Sumo", "Giant Robot Anime", "German Cuisine", "Catholicism", "Islam", "Buddhism", "Shinto", "Architecture", "Eschatology", "Numinology", "Role-Playing Games", "Spelunking", "Parliamentary Procedure", "Olympic History", "18th-Century Botanical Manuals", "Photography", "Marine Biology", "Entomology", "Archaeology"}
+	langList := []string{"Mandarin", "Spanish", "English", "Hindi", "Arabic", "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Wu", "Malay", "Telugu", "Vietnamese", "Korean", "French", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", "Yue (Cantonese)", "Thai", "Latin", "Greek", "Ancient Egyptian", "Apache", "Ainu", "Aleut", "Inuit", "Mayan"}
+	songList := []string{"Attraction", "Charm", "Dreams", "Entropy", "Form", "Harmony", "Healing", "Motion", "Numinous Corpus", "Possession", "Projection", "Shields", "Thunder", "Tongues"}
+
+	choirs := []string{"Seraph", "Cherub", "Ofanite", "Elohite", "Malakite", "Kyriotate", "Mercurian"}
+	bands := []string{"Balseraph", "Djinn", "Calabite", "Habbalite", "Lilim", "Shedite", "Impudite"}
+
+	aWords := []string{"Dreams", "Children", "Stone", "Judgment", "Creation", "Fire", "the Wind", "Lightning", "Animals", "Faith", "the Sword", "Revelation", "Trade", "War", "Flowers", "Destiny", "Protection"}
+	iWords := []string{"Nightmares", "Lust", "the Game", "the War", "Fire", "Drugs", "Hardcore", "Secrets (shhh!)", "Gluttony", "Dark Humor", "Fate", "Freedom", "Factions", "the Media", "Death", "Theft", "Technology"}
+
 	ply := Character{}
 	ply.Name = util.Namegen()
 	ply.TotalForces = 9
@@ -49,35 +65,16 @@ func main() {
 	ply.Skills = make(map[string]int)
 	ply.Songs = make(map[string]int)
 
-	corSkills := make([]string, 0, 50)
-	ethSkills := make([]string, 0, 50)
-	celSkills := make([]string, 0, 50)
-	akList := make([]string, 0, 50)
-	knowList := make([]string, 0, 50)
-	langList := make([]string, 0, 50)
-	songList := make([]string, 0, 50)
+	ply.Skills["Language (Local)"] = 3
+	if rand.Intn(2) == 0 {
+		ply.Kind = util.ChoiceStr(choirs)
+		ply.Word = util.ChoiceStr(aWords)
+	} else {
+		ply.Kind = util.ChoiceStr(bands)
+		ply.Word = util.ChoiceStr(iWords)
+	}
 
-	for _, v := range []string{"Acrobatics", "Climbing", "Dodge", "Escape", "Fighting", "Large Weapon", "Move Silently", "Running", "Swimming", "Throwing"} {
-		corSkills = append(corSkills, v)
-	}
-	for _, v := range []string{"Knowledge", "Knowledge", "Knowledge", "Area Knowledge", "Area Knowledge", "Area Knowledge", "Chemistry", "Computer Operation", "Driving", "Electronics", "Engineering", "Language", "Lockpicking", "Lying", "Medicine", "Ranged Weapon", "Savoir-Faire", "Small Weapon", "Tactics"} {
-		ethSkills = append(ethSkills, v)
-	}
-	for _, v := range []string{"Artistry", "Detect Lies", "Emote", "Fast-Talk", "Seduction", "Singing", "Survival", "Tracking"} {
-		celSkills = append(celSkills, v)
-	}
-	for _, v := range []string{"Heaven", "Hell", "Marches", "Caribbean", "New York", "New England", "Florida", "Atlanta", "Texas", "California", "American Southwest", "Pacific Northwest", "Portland", "Toronto", "Vancouver", "Mexico", "Central America", "Brazil", "Argentina", "England", "London", "France", "Paris", "Norway", "Scandinavia", "Greece", "Egypt", "North Africa", "Sub-Saharan Africa", "Saudi Arabia", "Middle East", "Russia", "Moscow", "China", "Shanghai", "Hong Kong", "Japan", "Hokkaido", "Tokyo", "Australia", "Sydney", "Melbourne", "Perth", "Fiji", "Antarctica"} {
-		akList = append(akList, v)
-	}
-	for _, v := range []string{"Astronomy", "Biology", "Literature", "Aircraft", "American Football", "Football", "Baseball", "Sumo", "Giant Robot Anime", "German Cuisine", "Catholicism", "Islam", "Buddhism", "Shinto", "Architecture", "Eschatology", "Numinology", "Role-Playing Games", "Spelunking", "Parliamentary Procedure", "Olympic History", "18th-Century Botanical Manuals", "Photography", "Marine Biology", "Entomology", "Archaeology"} {
-		knowList = append(knowList, v)
-	}
-	for _, v := range []string{"Mandarin", "Spanish", "English", "Hindi", "Arabic", "Portuguese", "Bengali", "Russian", "Japanese", "Punjabi", "German", "Javanese", "Wu", "Malay", "Telugu", "Vietnamese", "Korean", "French", "Marathi", "Tamil", "Urdu", "Turkish", "Italian", "Yue (Cantonese)", "Thai", "Latin", "Greek", "Ancient Egyptian", "Apache", "Ainu", "Aleut", "Inuit", "Mayan"} {
-		langList = append(langList, v)
-	}
-	for _, v := range []string{"Attraction", "Charm", "Dreams", "Entropy", "Form", "Harmony", "Healing", "Motion", "Numinous Corpus", "Possession", "Projection", "Shields", "Thunder", "Tongues"} {
-		songList = append(songList, v)
-	}
+	ply.Attunements = append(ply.Attunements, ply.Kind+" of "+ply.Word)
 
 	i := ply.TotalForces - (ply.CorporealForces + ply.EtherealForces + ply.CelestialForces)
 	for i > 0 {
@@ -209,6 +206,7 @@ func main() {
 
 	fmt.Println("=== Generated In Nomine character ===")
 	fmt.Println(ply.Name)
+	fmt.Printf("%s of %s\n", ply.Kind, ply.Word)
 	fmt.Printf("Cor %d\tEth %d\tCel %d\n",
 		ply.CorporealForces,
 		ply.EtherealForces,
@@ -221,7 +219,8 @@ func main() {
 		ply.Agility,
 		ply.Precision,
 		ply.Perception)
-	fmt.Println("Skills: ", sklout)
-	fmt.Println("Songs: ", sngout)
-	fmt.Println("CP Remaining: ", b)
+	fmt.Println("Skills:", sklout)
+	fmt.Println("Songs:", sngout)
+	fmt.Println("Attunements:", strings.Join(ply.Attunements, ", "))
+	fmt.Println("CP Remaining:", b)
 }
