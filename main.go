@@ -174,6 +174,10 @@ func main() {
 					// fmt.Println("Selected Corporeal skill: ", skl)
 				} else if q < ethBrk { // it's an ethereal skill
 					skl = util.ChoiceStr(ethSkills)
+					if skl == "Lying" && (ply.Kind == "Seraph" || ply.Kind == "Balseraph") {
+						i++
+						continue
+					}
 					if skl == "Knowledge" {
 						subskl := util.ChoiceStr(knowList)
 						skl = "Knowledge (" + subskl + ")"
