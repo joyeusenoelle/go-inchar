@@ -3,8 +3,9 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	// "sort"
-	// "strings"
+	"sort"
+	"strconv"
+	"strings"
 	"time"
 	"util"
 )
@@ -152,35 +153,59 @@ func main() {
 	for i := cp; i > b; i-- {
 		r := rand.Intn(15)
 		if r < sklBrk { // it's a skill
-			q := rand.Intn(ply.TotalForces)
-			skl := ""
-			if q < corBrk { // it's a corporeal skill
-				skl = util.ChoiceStr(corSkills)
-				// fmt.Println("Selected Corporeal skill: ", skl)
-			} else if q < ethBrk { // it's an ethereal skill
-				skl = util.ChoiceStr(ethSkills)
-				if skl == "Knowledge" {
-					subskl := util.ChoiceStr(knowList)
-					skl = "Knowledge (" + subskl + ")"
-				} else if skl == "Area Knowledge" {
-					subskl := util.ChoiceStr(akList)
-					skl = "Area Knowledge (" + subskl + ")"
-				} else if skl == "Language" {
-					subskl := util.ChoiceStr(langList)
-					skl = "Language (" + subskl + ")"
+			if rand.Intn(3) == 0 && len(ply.Skills) != 0 {
+				key, val := util.ChoiceMap(ply.Skills)
+				ply.Skills[key] = val + 1
+			} else {
+				q := rand.Intn(ply.TotalForces)
+				skl := ""
+				if q < corBrk { // it's a corporeal skill
+					skl = util.ChoiceStr(corSkills)
+					// fmt.Println("Selected Corporeal skill: ", skl)
+				} else if q < ethBrk { // it's an ethereal skill
+					skl = util.ChoiceStr(ethSkills)
+					if skl == "Knowledge" {
+						subskl := util.ChoiceStr(knowList)
+						skl = "Knowledge (" + subskl + ")"
+					} else if skl == "Area Knowledge" {
+						subskl := util.ChoiceStr(akList)
+						skl = "Area Knowledge (" + subskl + ")"
+					} else if skl == "Language" {
+						subskl := util.ChoiceStr(langList)
+						skl = "Language (" + subskl + ")"
+					}
+					// fmt.Println("Selected Ethereal skill: ", skl)
+				} else { // it's a celestial skill
+					skl = util.ChoiceStr(celSkills)
+					// fmt.Println("Selected Celestial skill: ", skl)
 				}
-				// fmt.Println("Selected Ethereal skill: ", skl)
-			} else { // it's a celestial skill
-				skl = util.ChoiceStr(celSkills)
-				// fmt.Println("Selected Celestial skill: ", skl)
+				ply.Skills[skl] = ply.Skills[skl] + 1
 			}
-			ply.Skills[skl] = ply.Skills[skl] + 1
 		} else { // Songs
-			skl := util.ChoiceStr(songList)
-			//			fmt.Println("Selected song: ", skl)
-			ply.Songs[skl] = ply.Songs[skl] + 1
+			if rand.Intn(3) == 0 && len(ply.Songs) != 0 {
+				key, val := util.ChoiceMap(ply.Songs)
+				ply.Songs[key] = val + 1
+			} else {
+				skl := util.ChoiceStr(songList)
+				//			fmt.Println("Selected song: ", skl)
+				ply.Songs[skl] = ply.Songs[skl] + 1
+			}
 		}
 	}
+
+	skills := make([]string, 0, len(ply.Skills))
+	songs := make([]string, 0, len(ply.Songs))
+	// fmt.Println(len(ply.Skills), len(ply.Songs), ply.Skills, ply.Songs)
+	for k, v := range ply.Skills {
+		skills = append(skills, k+"/"+strconv.Itoa(v))
+	}
+	for k, v := range ply.Songs {
+		songs = append(songs, k+"/"+strconv.Itoa(v))
+	}
+	sort.Strings(skills)
+	sort.Strings(songs)
+	sklout := strings.Join(skills[:], ", ")
+	sngout := strings.Join(songs[:], ", ")
 
 	fmt.Println("=== Generated In Nomine character ===")
 	fmt.Println(ply.Name)
@@ -196,7 +221,7 @@ func main() {
 		ply.Agility,
 		ply.Precision,
 		ply.Perception)
-	fmt.Println("Skills: ", ply.Skills)
-	fmt.Println("Songs: ", ply.Songs)
+	fmt.Println("Skills: ", sklout)
+	fmt.Println("Songs: ", sngout)
 	fmt.Println("CP Remaining: ", b)
 }
