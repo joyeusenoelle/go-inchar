@@ -180,7 +180,11 @@ func main() {
 					skl = util.ChoiceStr(celSkills)
 					// fmt.Println("Selected Celestial skill: ", skl)
 				}
-				ply.Skills[skl] = ply.Skills[skl] + 1
+				if ply.Skills[skl] == 6 {
+					i++
+				} else {
+					ply.Skills[skl] = ply.Skills[skl] + 1
+				}
 			}
 		} else { // Songs
 			if rand.Intn(3) == 0 && len(ply.Songs) != 0 {
@@ -193,7 +197,11 @@ func main() {
 			} else {
 				skl := util.ChoiceStr(songList)
 				//			fmt.Println("Selected song: ", skl)
-				ply.Songs[skl] = ply.Songs[skl] + 1
+				if ply.Songs[skl] == 6 {
+					i++
+				} else {
+					ply.Songs[skl] = ply.Songs[skl] + 1
+				}
 			}
 		}
 	}
