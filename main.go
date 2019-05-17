@@ -80,10 +80,19 @@ func main() {
 	for i > 0 {
 		r := rand.Intn(3)
 		if r == 0 {
+			if ply.CorporealForces == 6 {
+				continue
+			}
 			ply.CorporealForces = ply.CorporealForces + 1
 		} else if r == 1 {
+			if ply.EtherealForces == 6 {
+				continue
+			}
 			ply.EtherealForces = ply.EtherealForces + 1
 		} else {
+			if ply.CelestialForces == 6 {
+				continue
+			}
 			ply.CelestialForces = ply.CelestialForces + 1
 		}
 		i--
