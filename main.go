@@ -152,7 +152,11 @@ func main() {
 		if r < sklBrk { // it's a skill
 			if rand.Intn(3) == 0 && len(ply.Skills) != 0 {
 				key, val := util.ChoiceMap(ply.Skills)
-				ply.Skills[key] = val + 1
+				if ply.Skills[key] == 6 {
+					i++
+				} else {
+					ply.Skills[key] = val + 1
+				}
 			} else {
 				q := rand.Intn(ply.TotalForces)
 				skl := ""
@@ -181,7 +185,11 @@ func main() {
 		} else { // Songs
 			if rand.Intn(3) == 0 && len(ply.Songs) != 0 {
 				key, val := util.ChoiceMap(ply.Songs)
-				ply.Songs[key] = val + 1
+				if ply.Songs[key] == 6 {
+					i++
+				} else {
+					ply.Songs[key] = val + 1
+				}
 			} else {
 				skl := util.ChoiceStr(songList)
 				//			fmt.Println("Selected song: ", skl)
