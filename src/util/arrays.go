@@ -6,25 +6,16 @@ import (
 	"time"
 )
 
-// This doesn't work
-// func Choice(ary ...interface{}) interface{} {
-// 	rand.Seed(time.Now().UnixNano())
-// 	l := len(ary)
-// 	return ary[rand.Intn(l)]
-// }
-
 func Debug(msg ...interface{}) {
 	fmt.Println(msg)
 }
 
 func ChoiceInt(ary []int) int {
-	rand.Seed(time.Now().UnixNano())
 	l := len(ary)
 	return ary[rand.Intn(l)]
 }
 
 func ChoiceStr(ary []string) string {
-	rand.Seed(time.Now().UnixNano())
 	l := len(ary)
 	r := rand.Intn(l)
 	// fmt.Printf("Selected %s (element %d)\n", ary[r], r)
@@ -32,7 +23,6 @@ func ChoiceStr(ary []string) string {
 }
 
 func ChoiceMap(ary map[string]int) (string, int) {
-	rand.Seed(time.Now().UnixNano())
 	l := len(ary)
 	keys := make([]string, 0, l)
 	for k := range ary {
@@ -41,30 +31,3 @@ func ChoiceMap(ary map[string]int) (string, int) {
 	sel := ChoiceStr(keys)
 	return sel, ary[sel]
 }
-
-// func ChoiceMap(ary map[string]int) (string, int) {
-// 	rand.Seed(time.Now().UnixNano())
-// 	l := len(ary)
-// 	if l == 0 {
-// 		return "", 0
-// 	}
-// 	// fmt.Println(l)
-// 	key, val, rot := "", 0, 0
-// 	for key == "" {
-// 		// Debug(rot, key, val)
-// 		for k, v := range ary {
-// 			// Debug(k, v)
-// 			// Debug(rot)
-// 			r := 0
-// 			if rot < 3 {
-// 				r = rand.Intn(l)
-// 			}
-// 			if r == 0 {
-// 				return k, v
-// 			}
-// 		}
-// 		rot++
-// 		// fmt.Println(key, val)
-// 	}
-// 	return key, val
-// }
