@@ -3,7 +3,6 @@ package util
 import (
 	"fmt"
 	"math/rand"
-	"time"
 )
 
 func Debug(msg ...interface{}) {
@@ -22,7 +21,7 @@ func ChoiceStr(ary []string) string {
 	return ary[r]
 }
 
-func ChoiceMap(ary map[string]int) (string, int) {
+func ChoiceSIMap(ary map[string]int) (string, int) {
 	l := len(ary)
 	keys := make([]string, 0, l)
 	for k := range ary {

@@ -6,12 +6,16 @@ import (
 )
 
 func Namegen() string {
+	return FriendlyName(5, 5)
+}
+
+func FriendlyName(x, y int) string {
 	vowels := make([]string, 6)
 	copy(vowels, strings.Split("aeiouy", ""))
 	consonants := make([]string, 20)
 	copy(consonants, strings.Split("bcdfghjklmnpqrstvwxz", ""))
 
-	ln := rand.Intn(5) + 5
+	ln := rand.Intn(x) + y
 	vorc := rand.Intn(2)
 	i := 0
 	nm := make([]string, ln)
